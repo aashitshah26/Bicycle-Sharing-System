@@ -1,0 +1,295 @@
+#include <SoftwareSerial.h>
+#include <TinyGPS.h>
+SoftwareSerial mySerial(11,12);//tx=11
+SoftwareSerial GSM(9,10);
+int lock=8;
+int LED = 8;
+int lockstate=0;
+unsigned long finallat,finallon;
+double ab=72.123123;
+double bb=28.231231;
+int ls1=6;
+int ls2=7;
+int Data;
+int send1=0;
+
+int id=10001;
+TinyGPS gps;
+
+enum _parseState {
+PS_DETECT_MSG_TYPE,
+
+PS_IGNORING_COMMAND_ECHO,
+
+PS_HTTPACTION_TYPE,
+PS_HTTPACTION_RESULT,
+PS_HTTPACTION_LENGTH,
+
+PS_HTTPREAD_LENGTH,
+PS_HTTPREAD_CONTENT
+};
+
+byte parseState = PS_DETECT_MSG_TYPE;
+char buffer[130],url[130]; //adjust as your url length
+ byte pos = 0;
+
+ int contentLength = 0;
+
+ void resetBuffer() {
+  memset(buffer, 0, sizeof(buffer));
+  pos = 0;
+ }
+
+  void sendGSM(const char* msg, int waitMs = 500) {
+  GSM.println(msg);
+ delay(waitMs);
+ while(GSM.available()) {
+  parseATText(GSM.read());
+   }
+   }
+
+void gpsdump(TinyGPS &gps);
+void printFloat(double f, int digits = 2);
+int prevlat1,prevlat2,prevlong1,prevlong2;
+
+
+void setup() {
+   Serial.begin(9600);
+   GSM.begin(9600);
+    mySerial.begin(9600);
+  Serial.println("Heeyyyaaaa");
+ 
+  pinMode(lock,OUTPUT);
+  pinMode(LED,OUTPUT);
+  pinMode(ls1,INPUT_PULLUP);
+  pinMode(ls2,INPUT_PULLUP);
+  pinMode(5,INPUT_PULLUP);
+}
+
+void loop() {
+   
+if (Serial.available()){ //wait for data received
+    Data=Serial.read();
+    if(Data=='1'){  
+      digitalWrite(LED,HIGH);
+    }
+    }
+     if(digitalRead(ls1)==HIGH && digitalRead(ls2)==HIGH){
+    digitalWrite(lock,LOW);
+    send1=1;
+    getLocation(); 
+    }
+
+    if(digitalRead(5)==LOW){
+        if(digitalRead(ls1)==HIGH && digitalRead(ls2)==LOW){
+          if(send1==1){
+             Serial.println("0");
+             send1=0;
+          }  
+    } 
+   }
+}
+
+void getLocation()
+{
+   bool newdata = false;
+  unsigned long start = millis();
+  // Every 5 seconds we print an update
+  while (millis() - start < 5000) 
+  {
+    if (mySerial.available()) 
+    
+    {
+      char c = mySerial.read();
+      
+      if (gps.encode(c)) 
+      {
+        newdata = true;
+        break;  // uncomment to print new data immediately!
+      }
+    }
+  }
+  
+  if (newdata) 
+  {
+    
+    gpsdump(gps);  
+      
+    }
+  }
+ 
+
+  void gpsdump(TinyGPS &gps)
+    {
+      long lat, lon;
+  
+      float flat, flon;
+      unsigned long  chars;
+ 
+      unsigned short sentences, failed;
+
+  
+  
+
+       gps.f_get_position(&flat, &flon);
+      printFloat(flat,5,1);
+      printFloat(flon,5,2);
+     
+       
+    
+    Serial.println();
+
+  gps.stats(&chars, &sentences, &failed);
+   sendLocation();  
+
+    }
+
+
+    void printFloat(double number, int digits,int decider)
+{
+      if(decider==1)
+      {
+        number=number*100000;
+        finallat = (unsigned long)number;
+         
+      }
+      if(decider==2)
+      {
+        number=number*100000;
+       finallon=(unsigned long)number;
+      }
+  }
+
+
+  void sendLocation()
+     {
+      //Serial.println("Sending mail");
+  sendGSM("AT+SAPBR=3,1,\"APN\",\"TATA.DOCOMO.INTERNET\"");  
+ sendGSM("AT+SAPBR=1,1",300);
+sendGSM("AT+HTTPINIT");  
+sendGSM("AT+HTTPPARA=\"CID\",1");
+sprintf(url, "AT+HTTPPARA=\"URL\",\"http://psyclepath.000webhostapp.com/bike_no.php?lat=%ld&lon=%ld&id=%d\"",finallat,finallon,id);
+  sendGSM(url);
+  //Serial.println(url);
+  sendGSM("AT+HTTPACTION=0");  
+     }
+
+
+     void parseATText(byte b) {
+
+ buffer[pos++] = b;
+
+    if ( pos >= sizeof(buffer) )
+    resetBuffer(); // just to be safe
+
+  
+
+  switch (parseState) {
+  case PS_DETECT_MSG_TYPE: 
+    {
+  if ( b == '\n' )
+    resetBuffer();
+  else {        
+    if ( pos == 3 && strcmp(buffer, "AT+") == 0 ) {
+      parseState = PS_IGNORING_COMMAND_ECHO;
+    }
+    else if ( b == ':' ) {
+      //Serial.print("Checking message type: ");
+      //Serial.println(buffer);
+
+      if ( strcmp(buffer, "+HTTPACTION:") == 0 ) {
+        //Serial.println("Received HTTPACTION");
+        parseState = PS_HTTPACTION_TYPE;
+      }
+      else if ( strcmp(buffer, "+HTTPREAD:") == 0 ) {
+        //Serial.println("Received HTTPREAD");            
+        parseState = PS_HTTPREAD_LENGTH;
+      }
+      resetBuffer();
+    }
+  }
+}
+break;
+
+   case PS_IGNORING_COMMAND_ECHO:
+     {
+     if ( b == '\n' ) {
+    //Serial.print("Ignoring echo: ");
+    //Serial.println(buffer);
+    parseState = PS_DETECT_MSG_TYPE;
+    resetBuffer();
+  }
+}
+break;
+
+  case PS_HTTPACTION_TYPE:
+   {
+  if ( b == ',' ) {
+    //Serial.print("HTTPACTION type is ");
+    //Serial.println(buffer);
+    parseState = PS_HTTPACTION_RESULT;
+    resetBuffer();
+  }
+}
+break;
+
+ case PS_HTTPACTION_RESULT:
+   {
+  if ( b == ',' ) {
+   // Serial.print("HTTPACTION result is ");
+  //  Serial.println(buffer);
+    parseState = PS_HTTPACTION_LENGTH;
+    resetBuffer();
+  }
+}
+break;
+
+  case PS_HTTPACTION_LENGTH:
+  {
+  if ( b == '\n' ) {
+  //  Serial.print("HTTPACTION length is ");
+   // Serial.println(buffer);
+
+    // now request content
+    GSM.print("AT+HTTPREAD=0,");
+    GSM.println(buffer);
+
+    parseState = PS_DETECT_MSG_TYPE;
+    resetBuffer();
+  }
+}
+break;
+
+  case PS_HTTPREAD_LENGTH:
+    {
+  if ( b == '\n' ) {
+    contentLength = atoi(buffer);
+  //  Serial.print("HTTPREAD length is ");
+  //  Serial.println(contentLength);
+
+  //  Serial.print("HTTPREAD content: ");
+
+    parseState = PS_HTTPREAD_CONTENT;
+    resetBuffer();
+  }
+}
+break;
+
+   case PS_HTTPREAD_CONTENT:
+    {
+  // for this demo I'm just showing the content bytes in the serial monitor
+  //Serial.write(b);
+
+  contentLength--;
+
+  if ( contentLength <= 0 ) {
+
+    // all content bytes have now been read
+
+    parseState = PS_DETECT_MSG_TYPE;
+    resetBuffer();
+  }
+}
+break;
+ }
+}
