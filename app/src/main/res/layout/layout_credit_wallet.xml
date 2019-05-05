@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPrimary">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Credit/Debit Card"
+        android:gravity="center"
+        android:textColor="#fff"
+        android:textSize="25dp"
+        android:paddingTop="20dp"
+        android:fontFamily="sans-serif-smallcaps"/>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/mainlayout"
+    android:layout_marginTop="50dp"
+    android:layout_marginLeft="6dp"
+    android:layout_marginRight="6dp"
+    android:padding="10dp">
+
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Name:"
+        android:paddingLeft="20dp"
+        android:paddingTop="20dp"
+        android:textSize="22dp"/>
+
+    <EditText
+        android:id="@+id/dedttextcredit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edittextstyle"
+        android:layout_marginTop="8dp"
+        android:padding="10dp"
+        android:hint="Name same as on your card"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Card Number:"
+        android:textSize="22dp"
+        android:paddingTop="16dp"
+        android:paddingLeft="20dp"/>
+
+    <EditText
+        android:id="@+id/dedttextc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:numeric="integer"
+        android:background="@drawable/edittextstyle"
+        android:layout_marginTop="8dp"
+        android:padding="10dp"
+        android:maxLength="12"
+        android:hint="Card number"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Expire Date:"
+        android:textSize="22dp"
+        android:paddingTop="16dp"
+        android:paddingLeft="20dp"/>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+   android:orientation="horizontal">
+    <EditText
+        android:id="@+id/dedtdate"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:maxLength="2"
+        android:background="@drawable/edittextstyle"
+        android:padding="10dp"
+        android:hint="Date"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="/"
+        android:layout_marginLeft="10dp"
+        android:textSize="30dp"/>
+    <EditText
+        android:id="@+id/dedtmonth"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:maxLength="4"
+        android:background="@drawable/edittextstyle"
+        android:padding="10dp"
+        android:hint="Month"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cvv:"
+        android:layout_marginLeft="15dp"
+        android:textSize="25dp"/>
+    <EditText
+        android:id="@+id/dedtcvv"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:inputType="numberPassword"
+        android:maxLength="3"
+        android:background="@drawable/edittextstyle"
+        android:padding="10dp"
+        android:layout_marginLeft="10dp"
+        android:hint="CVV"
+        />
+</LinearLayout>
+
+    <EditText
+        android:id="@+id/dedtamount"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:background="@drawable/edittextstyle"
+        android:layout_marginTop="25dp"
+        android:padding="10dp"
+        android:hint="Amount"
+        />
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/dbtncredit"
+        android:text="Add"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/buttonstyle_wallet"
+        android:textColor="#fff"
+        android:fontFamily="sans-serif-smallcaps"/>
+
+</LinearLayout>
+</LinearLayout>
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:id="@+id/dprogress"
+        android:visibility="invisible" />
+</RelativeLayout>

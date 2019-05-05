@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".OTP"
+    android:background="#4fb3bf"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width = "wrap_content"
+        android:layout_height = "wrap_content"
+        android:text="Enter the OTP here :"
+        android:textSize="25dp"
+        android:textColor="#ffffff"
+        android:layout_gravity="center"
+        android:layout_marginTop="100dp"/>
+
+    <LinearLayout
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="10dp">
+
+        <EditText
+            android:id="@+id/ed_1"
+            android:layout_width = "50dp"
+            android:layout_height = "50dp"
+            android:background="@drawable/otp_text"
+            android:hint="-"
+            android:textColorHint="#000000"
+            android:gravity="center"
+            android:layout_margin="4dp"
+            android:maxLength="1"
+            android:inputType="number"
+
+            />
+
+        <EditText
+            android:id="@+id/ed_2"
+            android:layout_width = "50dp"
+            android:layout_height = "50dp"
+            android:background="@drawable/otp_text"
+            android:hint="-"
+            android:gravity="center"
+            android:layout_margin="4dp"
+            android:textColorHint="#000000"
+            android:maxLength="1"
+            android:inputType="number"
+            />
+
+        <EditText
+            android:id="@+id/ed_3"
+            android:layout_width = "50dp"
+            android:layout_height = "50dp"
+            android:background="@drawable/otp_text"
+            android:hint="-"
+            android:gravity="center"
+            android:layout_margin="4dp"
+            android:maxLength="1"
+            android:textColorHint="#000000"
+            android:inputType="number"
+            />
+
+        <EditText
+            android:id="@+id/ed_4"
+            android:layout_width = "50dp"
+            android:layout_height = "50dp"
+            android:background="@drawable/otp_text"
+            android:hint="-"
+            android:gravity="center"
+            android:layout_margin="4dp"
+            android:textColorHint="#000000"
+            android:maxLength="1"
+            android:inputType="number"
+            />
+
+        <EditText
+            android:id="@+id/ed_5"
+            android:layout_width = "50dp"
+            android:layout_height = "50dp"
+            android:background="@drawable/otp_text"
+            android:hint="-"
+            android:gravity="center"
+            android:textColorHint="#000000"
+            android:layout_margin="4dp"
+            android:maxLength="1"
+            android:inputType="number"
+            />
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn"
+        android:layout_width = "160dp"
+        android:layout_height = "50dp"
+        android:layout_gravity="center_horizontal"
+        android:text="Confirm"
+        android:textAllCaps="false"
+        android:textColor="#2899df"
+        android:textSize="20dp"
+        android:background="@drawable/button1"
+        android:layout_marginTop="20dp"/>
+
+
+</LinearLayout>

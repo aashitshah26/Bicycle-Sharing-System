@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:title="Home"
+            android:icon="@drawable/ic_home_black_24dp"
+            />
+        <item
+            android:id="@+id/nav_Wallet"
+            android:title="Wallet"
+            android:icon="@drawable/ic_account_balance_wallet_black_24dp"/>
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_person_black_24dp"
+            android:title="Edit Profile"
+            />
+        <item
+            android:id="@+id/nav_rides"
+             android:icon="@drawable/ic_directions_bike_black_24dp"
+            android:title="My Rides"
+            />
+        <item
+            android:id="@+id/report"
+            android:icon="@drawable/report"
+            android:title="Report Cycle"
+            />
+        <item
+            android:id="@+id/nav_manage"
+            android:icon="@drawable/logout"
+            android:title="Logout" />
+    </group>
+</menu>
